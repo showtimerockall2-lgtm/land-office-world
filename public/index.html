@@ -1,310 +1,304 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Land Office Virtual World</title>
-
-<style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Segoe UI',sans-serif;
-}
-
-body{
-height:100vh;
-display:flex;
-justify-content:center;
-align-items:center;
-background:linear-gradient(
-135deg,
-#0b5d1e,
-#198754,
-#20c997
-);
-overflow:hidden;
-}
-
-.bg{
-position:absolute;
-width:100%;
-height:100%;
-
-background:
-radial-gradient(
-circle at 20% 20%,
-rgba(255,255,255,.15),
-transparent 300px
-),
-
-radial-gradient(
-circle at 80% 80%,
-rgba(255,255,255,.15),
-transparent 300px
-);
-}
-
-.login-box{
-
-position:relative;
-
-width:450px;
-
-padding:40px;
-
-border-radius:25px;
-
-background:rgba(
-255,
-255,
-255,
-0.12
-);
-
-backdrop-filter:blur(15px);
-
-box-shadow:
-0 8px 32px
-rgba(
-0,
-0,
-0,
-0.25
-);
-
-text-align:center;
-
-color:white;
-
-}
-
-.logo{
-
-font-size:80px;
-
-margin-bottom:15px;
-
-}
-
-h1{
-
-font-size:32px;
-
-margin-bottom:10px;
-
-}
-
-.subtitle{
-
-opacity:.9;
-
-margin-bottom:25px;
-
-}
-
-input{
-
-width:100%;
-
-padding:15px;
-
-margin-bottom:15px;
-
-border:none;
-
-border-radius:12px;
-
-font-size:16px;
-
-outline:none;
-
-}
-
-select{
-
-width:100%;
-
-padding:15px;
-
-margin-bottom:20px;
-
-border:none;
-
-border-radius:12px;
-
-font-size:16px;
-
-outline:none;
-
-}
-
-button{
-
-width:100%;
-
-padding:15px;
-
-border:none;
-
-border-radius:12px;
-
-background:#157347;
-
-color:white;
-
-font-size:18px;
-
-font-weight:bold;
-
-cursor:pointer;
-
-transition:.3s;
-
-}
-
-button:hover{
-
-background:#0f5132;
-
-transform:translateY(-2px);
-
-}
-
-.info{
-
-margin-top:20px;
-
-font-size:13px;
-
-opacity:.8;
-
-}
-
-.server-status{
-
-margin-top:15px;
-
-padding:10px;
-
-background:rgba(
-255,
-255,
-255,
-0.15
-);
-
-border-radius:10px;
-
-font-size:14px;
-
-}
-
-</style>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gather Town Mini - Demo</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1a1a2e;
+            color: #eee;
+            overflow: hidden;
+        }
+        #game-container {
+            display: flex;
+            height: 100vh;
+        }
+        #canvas {
+            background: #16213e;
+            image-rendering: pixelated;
+            border-right: 2px solid #0f3460;
+        }
+        #sidebar {
+            width: 280px;
+            background: #0f3460;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+        #chat {
+            flex: 1;
+            overflow-y: auto;
+            background: #1e2a4d;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        .message {
+            margin: 8px 0;
+            padding: 6px 10px;
+            border-radius: 6px;
+            background: #16213e;
+        }
+        .message.system {
+            color: #a0d8ff;
+            font-style: italic;
+        }
+        #chat-input {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            background: #1e2a4d;
+            color: white;
+        }
+        #players {
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        .player {
+            padding: 4px 8px;
+            background: #1e2a4d;
+            margin: 4px 0;
+            border-radius: 4px;
+        }
+        h1 {
+            margin: 0 0 15px 0;
+            font-size: 18px;
+            text-align: center;
+        }
+        .instructions {
+            font-size: 12px;
+            opacity: 0.8;
+            margin-top: auto;
+        }
+    </style>
 </head>
-
 <body>
+    <div id="game-container">
+        <canvas id="canvas" width="800" height="600"></canvas>
+        
+        <div id="sidebar">
+            <h1>🌟 Gather Mini</h1>
+            
+            <div id="chat"></div>
+            
+            <input type="text" id="chat-input" placeholder="พิมพ์ข้อความแล้ว Enter...">
+            
+            <div id="players">
+                <strong>ผู้เล่นในห้อง (2)</strong>
+                <div class="player">คุณ (คุณ)</div>
+                <div class="player" id="other-player">เพื่อน1</div>
+            </div>
+            
+            <div class="instructions">
+                <strong>ควบคุม:</strong><br>
+                WASD หรือ ลูกศร — เดิน<br>
+                Enter — โฟกัสแชท<br>
+                <br>
+                <em>Demo เดี่ยว (จำลองผู้เล่นอื่น)</em>
+            </div>
+        </div>
+    </div>
 
-<div class="bg"></div>
-
-<div class="login-box">
-
-<div class="logo">
-🏢
-</div>
-
-<h1>
-Land Office World
-</h1>
-
-<div class="subtitle">
-ศูนย์พบปะออนไลน์ กรมที่ดิน
-</div>
-
-<input
-id="username"
-type="text"
-placeholder="กรอกชื่อผู้เล่น">
-
-<select id="avatar">
-
-<option value="👨‍💼">
-👨‍💼 เจ้าหน้าที่ชาย
-</option>
-
-<option value="👩‍💼">
-👩‍💼 เจ้าหน้าที่หญิง
-</option>
-
-<option value="🧑‍💼">
-🧑‍💼 บุคลากร
-</option>
-
-<option value="👨‍🌾">
-👨‍🌾 ประชาชน
-</option>
-
-<option value="👩‍🌾">
-👩‍🌾 ประชาชน
-</option>
-
-</select>
-
-<button onclick="joinGame()">
-เข้าสู่โลกเสมือน
-</button>
-
-<div class="server-status">
-🟢 Server Online
-</div>
-
-<div class="info">
-Land Office Virtual World v1.0
-</div>
-
-</div>
-
-<script>
-
-function joinGame(){
-
-let username =
-document.getElementById(
-"username"
-).value;
-
-if(username==""){
-
-alert(
-"กรุณากรอกชื่อผู้เล่น"
-);
-
-return;
-
-}
-
-localStorage.setItem(
-"username",
-username
-);
-
-localStorage.setItem(
-"avatar",
-document.getElementById(
-"avatar"
-).value
-);
-
-window.location.href =
-"world.html";
-
-}
-
-</script>
-
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Game variables
+        let player = {
+            x: 400,
+            y: 300,
+            size: 24,
+            color: '#00ffcc',
+            name: 'คุณ'
+        };
+        
+        let otherPlayer = {
+            x: 550,
+            y: 250,
+            size: 24,
+            color: '#ff66aa',
+            name: 'เพื่อน1',
+            targetX: 550,
+            targetY: 250
+        };
+        
+        const keys = {};
+        let messages = [];
+        
+        // Simple map (floor)
+        function drawMap() {
+            ctx.fillStyle = '#1e3a2f';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Grid
+            ctx.strokeStyle = '#2a5c4a';
+            ctx.lineWidth = 1;
+            for (let x = 0; x < canvas.width; x += 40) {
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, canvas.height);
+                ctx.stroke();
+            }
+            for (let y = 0; y < canvas.height; y += 40) {
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(canvas.width, y);
+                ctx.stroke();
+            }
+            
+            // Some furniture
+            ctx.fillStyle = '#8B4513';
+            ctx.fillRect(150, 150, 80, 60); // table
+            ctx.fillStyle = '#654321';
+            ctx.fillRect(100, 80, 40, 40); // plant
+        }
+        
+        function drawPlayer(p) {
+            // Shadow
+            ctx.fillStyle = 'rgba(0,0,0,0.4)';
+            ctx.beginPath();
+            ctx.ellipse(p.x + 4, p.y + 8, p.size/2, p.size/3.5, 0, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Body
+            ctx.fillStyle = p.color;
+            ctx.fillRect(p.x - p.size/2, p.y - p.size/2, p.size, p.size);
+            
+            // Head
+            ctx.fillStyle = '#ffe0bd';
+            ctx.beginPath();
+            ctx.arc(p.x, p.y - 8, 10, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Name
+            ctx.fillStyle = 'white';
+            ctx.font = '12px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText(p.name, p.x, p.y - 28);
+        }
+        
+        function gameLoop() {
+            drawMap();
+            
+            // Player movement
+            const speed = 4;
+            if (keys['w'] || keys['ArrowUp']) player.y -= speed;
+            if (keys['s'] || keys['ArrowDown']) player.y += speed;
+            if (keys['a'] || keys['ArrowLeft']) player.x -= speed;
+            if (keys['d'] || keys['ArrowRight']) player.x += speed;
+            
+            // Keep in bounds
+            player.x = Math.max(player.size/2, Math.min(canvas.width - player.size/2, player.x));
+            player.y = Math.max(player.size/2, Math.min(canvas.height - player.size/2, player.y));
+            
+            // Simulate other player wandering
+            if (Math.random() < 0.02) {
+                otherPlayer.targetX = Math.random() * (canvas.width - 100) + 50;
+                otherPlayer.targetY = Math.random() * (canvas.height - 100) + 50;
+            }
+            const dx = otherPlayer.targetX - otherPlayer.x;
+            const dy = otherPlayer.targetY - otherPlayer.y;
+            const dist = Math.sqrt(dx*dx + dy*dy);
+            if (dist > 3) {
+                otherPlayer.x += (dx / dist) * 2.2;
+                otherPlayer.y += (dy / dist) * 2.2;
+            }
+            
+            drawPlayer(player);
+            drawPlayer(otherPlayer);
+            
+            // Proximity chat indicator
+            const distToOther = Math.hypot(player.x - otherPlayer.x, player.y - otherPlayer.y);
+            if (distToOther < 120) {
+                ctx.fillStyle = 'rgba(255,255,100,0.6)';
+                ctx.font = 'bold 14px sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText('🗣️ ใกล้กัน!', (player.x + otherPlayer.x)/2, Math.min(player.y, otherPlayer.y) - 50);
+            }
+            
+            requestAnimationFrame(gameLoop);
+        }
+        
+        // Chat system
+        const chatDiv = document.getElementById('chat');
+        const input = document.getElementById('chat-input');
+        
+        function addMessage(text, isSystem = false) {
+            const msg = document.createElement('div');
+            msg.className = `message ${isSystem ? 'system' : ''}`;
+            msg.innerHTML = isSystem ? text : `<strong>คุณ:</strong> ${text}`;
+            chatDiv.appendChild(msg);
+            chatDiv.scrollTop = chatDiv.scrollHeight;
+            
+            messages.push(text);
+            if (messages.length > 8) messages.shift();
+        }
+        
+        input.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && input.value.trim() !== '') {
+                const msg = input.value.trim();
+                addMessage(msg);
+                
+                // Simulate reply from other player
+                setTimeout(() => {
+                    const replies = ['สวัสดี!', 'อยู่ไหนอะ', '555', 'มาเล่นด้วย', 'โอเค!'];
+                    const reply = replies[Math.floor(Math.random() * replies.length)];
+                    const replyMsg = document.createElement('div');
+                    replyMsg.className = 'message';
+                    replyMsg.innerHTML = `<strong>เพื่อน1:</strong> ${reply}`;
+                    chatDiv.appendChild(replyMsg);
+                    chatDiv.scrollTop = chatDiv.scrollHeight;
+                }, 800);
+                
+                input.value = '';
+            }
+        });
+        
+        // Keyboard
+        window.addEventListener('keydown', e => {
+            keys[e.key] = true;
+            if (e.key === 'Enter') {
+                input.focus();
+            }
+        });
+        
+        window.addEventListener('keyup', e => {
+            keys[e.key] = false;
+        });
+        
+        // Mouse click to move (optional)
+        canvas.addEventListener('click', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            player.x = e.clientX - rect.left;
+            player.y = e.clientY - rect.top;
+        });
+        
+        // Initial messages
+        setTimeout(() => addMessage('ยินดีต้อนรับสู่ Gather Mini!', true), 300);
+        setTimeout(() => addMessage('เพื่อน1 เข้ามาแล้ว', true), 1200);
+        
+        // Start game
+        gameLoop();
+        
+        // Mobile touch support (basic)
+        let touchStartX, touchStartY;
+        canvas.addEventListener('touchstart', e => {
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+        });
+        canvas.addEventListener('touchmove', e => {
+            if (!touchStartX || !touchStartY) return;
+            const touchX = e.touches[0].clientX;
+            const touchY = e.touches[0].clientY;
+            player.x += (touchX - touchStartX) * 0.6;
+            player.y += (touchY - touchStartY) * 0.6;
+            touchStartX = touchX;
+            touchStartY = touchY;
+        });
+    </script>
 </body>
 </html>
