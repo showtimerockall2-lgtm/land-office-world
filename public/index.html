@@ -1,8 +1,310 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!doctype html><html><head><meta charset="utf-8"><title>Land Office World</title>
-<link rel="stylesheet" href="style.css"></head><body>
-<div id="login"><input id="name" placeholder="ชื่อ"><button onclick="join()">เข้า</button></div>
-<div id="game" style="display:none"><div id="world"></div><div id="chat"></div>
-<input id="msg"><button onclick="sendMsg()">ส่ง</button></div>
-<script src="/socket.io/socket.io.js"></script><script src="game.js"></script>
-</body></html>
+<title>Land Office Virtual World</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Segoe UI',sans-serif;
+}
+
+body{
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:linear-gradient(
+135deg,
+#0b5d1e,
+#198754,
+#20c997
+);
+overflow:hidden;
+}
+
+.bg{
+position:absolute;
+width:100%;
+height:100%;
+
+background:
+radial-gradient(
+circle at 20% 20%,
+rgba(255,255,255,.15),
+transparent 300px
+),
+
+radial-gradient(
+circle at 80% 80%,
+rgba(255,255,255,.15),
+transparent 300px
+);
+}
+
+.login-box{
+
+position:relative;
+
+width:450px;
+
+padding:40px;
+
+border-radius:25px;
+
+background:rgba(
+255,
+255,
+255,
+0.12
+);
+
+backdrop-filter:blur(15px);
+
+box-shadow:
+0 8px 32px
+rgba(
+0,
+0,
+0,
+0.25
+);
+
+text-align:center;
+
+color:white;
+
+}
+
+.logo{
+
+font-size:80px;
+
+margin-bottom:15px;
+
+}
+
+h1{
+
+font-size:32px;
+
+margin-bottom:10px;
+
+}
+
+.subtitle{
+
+opacity:.9;
+
+margin-bottom:25px;
+
+}
+
+input{
+
+width:100%;
+
+padding:15px;
+
+margin-bottom:15px;
+
+border:none;
+
+border-radius:12px;
+
+font-size:16px;
+
+outline:none;
+
+}
+
+select{
+
+width:100%;
+
+padding:15px;
+
+margin-bottom:20px;
+
+border:none;
+
+border-radius:12px;
+
+font-size:16px;
+
+outline:none;
+
+}
+
+button{
+
+width:100%;
+
+padding:15px;
+
+border:none;
+
+border-radius:12px;
+
+background:#157347;
+
+color:white;
+
+font-size:18px;
+
+font-weight:bold;
+
+cursor:pointer;
+
+transition:.3s;
+
+}
+
+button:hover{
+
+background:#0f5132;
+
+transform:translateY(-2px);
+
+}
+
+.info{
+
+margin-top:20px;
+
+font-size:13px;
+
+opacity:.8;
+
+}
+
+.server-status{
+
+margin-top:15px;
+
+padding:10px;
+
+background:rgba(
+255,
+255,
+255,
+0.15
+);
+
+border-radius:10px;
+
+font-size:14px;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="bg"></div>
+
+<div class="login-box">
+
+<div class="logo">
+🏢
+</div>
+
+<h1>
+Land Office World
+</h1>
+
+<div class="subtitle">
+ศูนย์พบปะออนไลน์ กรมที่ดิน
+</div>
+
+<input
+id="username"
+type="text"
+placeholder="กรอกชื่อผู้เล่น">
+
+<select id="avatar">
+
+<option value="👨‍💼">
+👨‍💼 เจ้าหน้าที่ชาย
+</option>
+
+<option value="👩‍💼">
+👩‍💼 เจ้าหน้าที่หญิง
+</option>
+
+<option value="🧑‍💼">
+🧑‍💼 บุคลากร
+</option>
+
+<option value="👨‍🌾">
+👨‍🌾 ประชาชน
+</option>
+
+<option value="👩‍🌾">
+👩‍🌾 ประชาชน
+</option>
+
+</select>
+
+<button onclick="joinGame()">
+เข้าสู่โลกเสมือน
+</button>
+
+<div class="server-status">
+🟢 Server Online
+</div>
+
+<div class="info">
+Land Office Virtual World v1.0
+</div>
+
+</div>
+
+<script>
+
+function joinGame(){
+
+let username =
+document.getElementById(
+"username"
+).value;
+
+if(username==""){
+
+alert(
+"กรุณากรอกชื่อผู้เล่น"
+);
+
+return;
+
+}
+
+localStorage.setItem(
+"username",
+username
+);
+
+localStorage.setItem(
+"avatar",
+document.getElementById(
+"avatar"
+).value
+);
+
+window.location.href =
+"world.html";
+
+}
+
+</script>
+
+</body>
+</html>
