@@ -1,0 +1,9 @@
+
+CREATE DATABASE IF NOT EXISTS landworld;
+USE landworld;
+CREATE TABLE chat_logs(
+ id INT AUTO_INCREMENT PRIMARY KEY,
+ username VARCHAR(100),
+ message TEXT,
+ created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
